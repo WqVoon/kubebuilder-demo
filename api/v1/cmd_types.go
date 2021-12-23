@@ -17,14 +17,19 @@ type CmdSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of Cmd. Edit cmd_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// Command 保存要被执行的 shell 命令，作为 `exec.CommandContext()` 的 name 参数
+	Command string `json:"command,omitempty"`
+	// Args 保存要 shell 命令的参数，作为 `exec.CommandContext()` 的 args 参数
+	Args []string `json:"args,omitempty"`
 }
 
 // CmdStatus defines the observed state of Cmd
 type CmdStatus struct {
 	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
+
+	// Results 保存 worker 执行的结果，其中的 key 是主机名，value 是命令的输出（stdout & stderr）
+	Results map[string]string `json:"results,omitempty"`
 }
 
 //+kubebuilder:object:root=true
