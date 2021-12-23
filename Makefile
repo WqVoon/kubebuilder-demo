@@ -105,7 +105,12 @@ CONTROLLER_GEN = $(shell pwd)/bin/controller-gen
 controller-gen: ## Download controller-gen locally if necessary.
 	$(call go-get-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0.7.0)
 
+# 如果本地存在 kustomize 命令，那么切换执行路径
+ifeq (,$(shell hash kustomize >/dev/null))
+KUSTOMIZE = $(shell which kustomize)
+else
 KUSTOMIZE = $(shell pwd)/bin/kustomize
+endif
 .PHONY: kustomize
 kustomize: ## Download kustomize locally if necessary.
 	$(call go-get-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v3@v3.8.7)
