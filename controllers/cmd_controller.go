@@ -7,7 +7,7 @@ package controllers
 
 import (
 	"context"
-	"fmt"
+	"os"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -16,6 +16,18 @@ import (
 
 	distrunv1 "ghy-test/kubebuilder-demo/api/v1"
 )
+
+const defaultNodeName = "test-node"
+
+var nodeName string
+
+func init() {
+	nodeName = os.Getenv("KUBE_NODE_NAME")
+
+	if nodeName == "" {
+		nodeName = defaultNodeName
+	}
+}
 
 // CmdReconciler reconciles a Cmd object
 type CmdReconciler struct {
@@ -37,10 +49,22 @@ type CmdReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.10.0/pkg/reconcile
 func (r *CmdReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	logger := log.FromContext(ctx)
 
-	// TODO(user): your logic here
-	fmt.Println("Can u see me?")
+	cmd := &distrunv1.Cmd{}
+	if err := r.Get(ctx, req.NamespacedName, cmd); err != nil {
+		logger.Error(err, "can not find resource")
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
+
+	result := NewExecutor(cmd).Exec()
+	logger.Info("get result success", "nodeName", nodeName, "result", result)
+	cmd.Status.Results = map[string]string{nodeName: result}
+
+	if err := r.Status().Patch(ctx, cmd, client.Merge); err != nil {
+		logger.Error(err, "can not patch resource")
+		return ctrl.Result{}, client.IgnoreNotFound(err)
+	}
 
 	return ctrl.Result{}, nil
 }
