@@ -46,6 +46,10 @@ spec:
                 description: Command 保存要被执行的 shell 命令，作为 `exec.CommandContext()` 的
                   name 参数
                 type: string
+              timeout:
+                description: Timeout 保存命令执行的最大等待时间（单位秒，默认为 1），超时则取消
+                format: int64
+                type: integer
             type: object
           status:
             description: CmdStatus defines the observed state of Cmd
