@@ -7,6 +7,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -39,6 +40,7 @@ func (r *CmdReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	_ = log.FromContext(ctx)
 
 	// TODO(user): your logic here
+	fmt.Println("Can u see me?")
 
 	return ctrl.Result{}, nil
 }
@@ -47,5 +49,6 @@ func (r *CmdReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 func (r *CmdReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&distrunv1.Cmd{}).
+		WithEventFilter(&CmdPredicate{}).
 		Complete(r)
 }
