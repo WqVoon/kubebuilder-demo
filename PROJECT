@@ -1,0 +1,6 @@
+domain: demo.com
+layout:
+- go.kubebuilder.io/v3
+projectName: kubebuilder-demo
+repo: ghy-test/kubebuilder-demo
+version: "3"
