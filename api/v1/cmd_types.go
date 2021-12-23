@@ -56,3 +56,31 @@ type CmdList struct {
 func init() {
 	SchemeBuilder.Register(&Cmd{}, &CmdList{})
 }
+
+// 判断两个 Cmd 需要执行的命令是否相等
+func (self *Cmd) CommandIsEqualTo(other *Cmd) bool {
+	if self == nil && other == nil {
+		return true
+	}
+	if self == nil || other == nil {
+		return false
+	}
+
+	if self.Spec.Command != other.Spec.Command {
+		return false
+	}
+
+	if len(self.Spec.Args) != len(other.Spec.Args) {
+		return false
+	}
+
+	for idx, selfArg := range self.Spec.Args {
+		otherArg := other.Spec.Args[idx]
+
+		if selfArg != otherArg {
+			return false
+		}
+	}
+
+	return true
+}
