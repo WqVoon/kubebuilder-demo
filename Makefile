@@ -65,6 +65,10 @@ test: manifests generate fmt vet envtest ## Run tests.
 build: generate fmt vet ## Build manager binary.
 	go build -o bin/manager main.go
 
+.PHONY: build-linux
+build-linux: generate fmt vet ## Build manager binary for linux platform.
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o linux-bin/manager main.go
+
 .PHONY: run
 run: manifests generate fmt vet ## Run a controller from your host.
 	go run ./main.go
@@ -72,6 +76,10 @@ run: manifests generate fmt vet ## Run a controller from your host.
 .PHONY: docker-build
 docker-build: test ## Build docker image with the manager.
 	docker build -t ${IMG} .
+
+.PHONY: docker-build-new
+docker-build-new: build-linux ## Build docker image by ./Dockerfile.new file
+	docker build -t ${IMG} -f ./Dockerfile.new .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.

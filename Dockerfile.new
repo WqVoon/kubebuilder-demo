@@ -1,0 +1,9 @@
+# 本文件试图以 busybox 为基础镜像创建 manager 的运行环境
+# 同时直接从本地拷贝 linux 的可执行文件到镜像中，避免镜像内的编译
+FROM busybox
+
+COPY ./linux-bin/manager /
+
+USER 65532:65532
+
+ENTRYPOINT ["/manager"]
