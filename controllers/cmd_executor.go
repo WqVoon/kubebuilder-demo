@@ -5,6 +5,7 @@ import (
 	"fmt"
 	distrunv1 "ghy-test/kubebuilder-demo/api/v1"
 	"os/exec"
+	"strings"
 	"time"
 )
 
@@ -38,7 +39,7 @@ func NewExecutor(cmd *distrunv1.Cmd) *CmdExecutor {
 
 // 执行命令，返回命令执行结果的字符串形式（错误信息或正常结果）
 func (ce *CmdExecutor) Exec() string {
-	if ce == nil {
+	if ce == nil || strings.TrimSpace(ce.Command) == "" {
 		return defaultResult
 	}
 
