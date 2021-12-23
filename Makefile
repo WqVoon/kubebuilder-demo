@@ -118,7 +118,7 @@ envtest: ## Download envtest-setup locally if necessary.
 # go-get-tool will 'go get' any package $2 and install it to $1.
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
 define go-get-tool
-@[ -f $(1) ] || { \
+@type $$(basename $(1)) >/dev/null 2>&1 || [ -f $(1) ] || { \
 set -e ;\
 TMP_DIR=$$(mktemp -d) ;\
 cd $$TMP_DIR ;\
