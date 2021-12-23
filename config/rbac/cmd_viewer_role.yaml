@@ -1,0 +1,20 @@
+# permissions for end users to view cmds.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cmd-viewer-role
+rules:
+- apiGroups:
+  - distrun.demo.com
+  resources:
+  - cmds
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - distrun.demo.com
+  resources:
+  - cmds/status
+  verbs:
+  - get

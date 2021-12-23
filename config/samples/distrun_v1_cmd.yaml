@@ -1,0 +1,6 @@
+apiVersion: distrun.demo.com/v1
+kind: Cmd
+metadata:
+  name: cmd-sample
+spec:
+  # TODO(user): Add fields here
