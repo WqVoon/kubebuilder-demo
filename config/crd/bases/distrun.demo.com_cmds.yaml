@@ -37,8 +37,8 @@ spec:
             description: CmdSpec defines the desired state of Cmd
             properties:
               args:
-                description: Args 保存要 shell 命令的参数，作为 `exec.CommandContext()` 的 args
-                  参数
+                description: Args 保存要被执行的 shell 命令的参数，作为 `exec.CommandContext()` 的
+                  args 参数
                 items:
                   type: string
                 type: array

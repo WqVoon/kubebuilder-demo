@@ -19,7 +19,7 @@ type CmdSpec struct {
 
 	// Command 保存要被执行的 shell 命令，作为 `exec.CommandContext()` 的 name 参数
 	Command string `json:"command,omitempty"`
-	// Args 保存要 shell 命令的参数，作为 `exec.CommandContext()` 的 args 参数
+	// Args 保存要被执行的 shell 命令的参数，作为 `exec.CommandContext()` 的 args 参数
 	Args []string `json:"args,omitempty"`
 	// Timeout 保存命令执行的最大等待时间（单位秒，默认为 1），超时则取消
 	Timeout int64 `json:"timeout,omitempty"`
