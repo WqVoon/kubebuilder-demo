@@ -56,7 +56,22 @@ spec:
             properties:
               results:
                 additionalProperties:
-                  type: string
+                  description: CmdResult 定义命令的返回结果
+                  properties:
+                    error:
+                      description: 如果执行错误，保存错误信息
+                      type: string
+                    stderr:
+                      description: 保存命令的标准错误
+                      type: string
+                    stdout:
+                      description: 保存命令的标准输出
+                      type: string
+                  required:
+                  - error
+                  - stderr
+                  - stdout
+                  type: object
                 description: Results 保存 worker 执行的结果，其中的 key 是主机名，value 是命令的输出（stdout
                   & stderr）
                 type: object

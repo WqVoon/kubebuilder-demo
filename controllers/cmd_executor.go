@@ -1,8 +1,8 @@
 package controllers
 
 import (
+	"bytes"
 	"context"
-	"fmt"
 	distrunv1 "ghy-test/kubebuilder-demo/api/v1"
 	"os/exec"
 	"strings"
@@ -38,24 +38,28 @@ func NewExecutor(cmd *distrunv1.Cmd) *CmdExecutor {
 }
 
 // 执行命令，返回命令执行结果的字符串形式（错误信息或正常结果）
-func (ce *CmdExecutor) Exec() string {
+func (ce *CmdExecutor) Exec() (stdout string, stderr string, errorMsg string) {
 	if ce == nil || strings.TrimSpace(ce.Command) == "" {
-		return defaultResult
+		return defaultResult, "", ""
 	}
 
 	ctx, cancelFunc := context.WithTimeout(context.Background(), ce.Timeout)
 	defer cancelFunc()
 
+	var stdoutBuf, stderrBuf bytes.Buffer
 	cmd := exec.CommandContext(ctx, ce.Command, ce.Args...)
-	out, err := cmd.CombinedOutput()
+	cmd.Stdout = &stdoutBuf
+	cmd.Stderr = &stderrBuf
+
+	if err := cmd.Run(); err != nil {
+		errorMsg = err.Error()
+	}
 
 	// 优先返回 ctx 的错误信息（超时错误）
 	if ctx.Err() != nil {
-		return fmt.Sprintf("[ERROR] %q", ctx.Err().Error())
-	}
-	if err != nil {
-		return fmt.Sprintf("[ERROR] %q", err.Error())
+		errorMsg = ctx.Err().Error()
 	}
 
-	return fmt.Sprintf("[SUCCESS] %q", string(out))
+	stdout, stderr = stdoutBuf.String(), stderrBuf.String()
+	return
 }

@@ -57,9 +57,18 @@ func (r *CmdReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	result := NewExecutor(cmd).Exec()
-	logger.Info("get result success", "nodeName", nodeName, "result", result)
-	cmd.Status.Results = map[string]string{nodeName: result}
+	stdout, stderr, err := NewExecutor(cmd).Exec()
+	logger.Info("result info",
+		"nodeName", nodeName,
+		"stdout", stdout,
+		"stderr", stderr,
+		"err", err,
+	)
+	cmd.Status.Results = map[string]distrunv1.CmdResult{nodeName: {
+		Error:  err,
+		Stdout: stdout,
+		Stderr: stderr,
+	}}
 
 	if err := r.Status().Patch(ctx, cmd, client.Merge); err != nil {
 		logger.Error(err, "can not patch resource")

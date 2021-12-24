@@ -17,15 +17,15 @@ func TestExecutor(t *testing.T) {
 			Command: "ls",
 		},
 	}
-	// 结果应该是 `[SUCCESS] 目录中的内容`
+	// 结果应该是目录中的内容
 	t.Log(NewExecutor(cmd).Exec())
 
 	cmd.Spec.Command = notExistsCmd
-	// 结果应该是 `[ERROR] "exec: \"1011928\": executable file not found in $PATH"`
+	// 结果应该是 `exec: "1011928": executable file not found in $PATH`
 	t.Log(NewExecutor(cmd).Exec())
 
 	cmd.Spec.Command = "sleep"
 	cmd.Spec.Args = append(cmd.Spec.Args, "10")
-	// 结果应该是 `[ERROR] "context deadline exceeded"`
+	// 结果应该是 `context deadline exceeded`
 	t.Log(NewExecutor(cmd).Exec())
 }

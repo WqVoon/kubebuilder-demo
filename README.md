@@ -10,18 +10,27 @@ metadata:
   name: cmd-sample
 spec:
 # 命令主体，作为 `exec.CommandContext()` 的 name 参数
-  command: echo
+  command: sleep
 # 命令参数，作为 `exec.CommandContext()` 的 args 参数
   args:
-  - Hello
-  - World
-# 最大执行时间，如果超过该时间命令还未执行完成，返回 `[ERROR] "context deadline exceeded"`
+  - "10"
+# 最大执行时间，如果超过该时间命令还未执行完成，返回 `context deadline exceeded`
   timeout: 1 # 单位秒，默认为 1
 status:
 # 是一个 map，键是节点名（利用 fieldRef 获得），值是命令执行的结果
   results:
-    minikube-m02: '[SUCCESS] "Hello World\n"'
-    minikube-m03: '[SUCCESS] "Hello World\n"'
+    minikube:
+      error: context deadline exceeded
+      stderr: ""
+      stdout: ""
+    minikube-m02:
+      error: context deadline exceeded
+      stderr: ""
+      stdout: ""
+    minikube-m03:
+      error: context deadline exceeded
+      stderr: ""
+      stdout: ""
 ```
 
 

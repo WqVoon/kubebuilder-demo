@@ -31,7 +31,17 @@ type CmdStatus struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// Results 保存 worker 执行的结果，其中的 key 是主机名，value 是命令的输出（stdout & stderr）
-	Results map[string]string `json:"results,omitempty"`
+	Results map[string]CmdResult `json:"results,omitempty"`
+}
+
+// CmdResult 定义命令的返回结果
+type CmdResult struct {
+	// 如果执行错误，保存错误信息
+	Error string `json:"error"`
+	// 保存命令的标准输出
+	Stdout string `json:"stdout"`
+	// 保存命令的标准错误
+	Stderr string `json:"stderr"`
 }
 
 //+kubebuilder:object:root=true
