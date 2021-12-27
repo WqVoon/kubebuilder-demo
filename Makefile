@@ -114,7 +114,7 @@ controller-gen: ## Download controller-gen locally if necessary.
 	$(call go-get-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0.7.0)
 
 # 如果本地存在 kustomize 命令，那么切换执行路径
-ifeq (,$(shell hash kustomize >/dev/null))
+ifeq (1,$(shell hash kustomize >/dev/null && echo 1))
 KUSTOMIZE = $(shell which kustomize)
 else
 KUSTOMIZE = $(shell pwd)/bin/kustomize
